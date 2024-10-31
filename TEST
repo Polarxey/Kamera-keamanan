@@ -1,4 +1,93 @@
-testing 1231231231
+#Pemesanan kamar (nomor,nama,harga) lalu tampilkan semua data saat selesai
+import sys
+pemesanan_kamar = []
 
+def pesan_kamar (nomor, nama, harga):
+    pemesanan_kamar.append({
+        'nomor' : nomor,
+        'nama' : nama,
+        'harga' : harga
+    })
+    print(f"Pemesanan kamar {nomor} telah berhasil ")
+    
+while True :
+    print("Isi data untuk memesan kamar")
+    nomor = input("Masukkan nomor kamar : ")
+    nama = input("Masukkan nama pemesan : ")
+    
+    try:
+        harga = float(input("Harga kamar per-malam: Rp"))
+        if harga <= 0:
+            print("Harga tidak valid, masukkan angka yang valid.")
+            continue
+        
+        pesan_kamar(nomor, nama, harga)
+        
+        print("\nDaftar Pemesanan Kamar:")
+        for pemesanan in pemesanan_kamar:
+            print(f"Nomor Kamar: {pemesanan['nomor']}, Nama Tamu: {pemesanan['nama']}, Harga: Rp{pemesanan['harga']}")
+        
+    except ValueError:
+        print("Input harga tidak valid. Silakan coba lagi.")
+    
+    lagi = input("Apakah Anda ingin memesan kamar lagi? (ya/tidak): ")
+    if lagi == 'tidak':
+        print ("Terima kasih sudah menginap di tempat kami")
+        break   
+    elif lagi == 'ya':
+        continue
+        
+# Tampilkan semua pemesanan yang ada
 
-test  asa
+def tampilkan_semua_pemesanan():
+    print ("Data pemesanan:")
+    if not pemesanan_kamar:
+        print ("Belum ada kamar yang di pemesanan")
+    else:
+        for pemesanan in pemesanan_kamar:
+            print ("=" * 30)
+            print (f"Atas nama: {pemesanan['nama']}")
+            print (f"Ruangan: {pemesanan['nomor']}")
+            print (f"Harga per malam: Rp.{pemesanan['harga']}")
+            print ("=" * 30)
+            
+tampilkan_semua_pemesanan ()   
+
+#Nomor paling sering dipesan
+
+def kamar_tersering_dipesan():
+    if not pemesanan_kamar:
+        print("Belum ada pemesanan kamar.")
+        return
+
+    kamar_count = {}
+    for pemesanan in pemesanan_kamar:
+        nomor = pemesanan['nomor']
+        kamar_count[nomor] = kamar_count.get(nomor, 0) + 1
+
+    kamar_tersering = max(kamar_count, key=kamar_count.get)
+    print(f"Kamar yang paling sering dipesan adalah kamar nomor {kamar_tersering} dengan {kamar_count[kamar_tersering]} pemesanan.")
+    
+kamar_tersering_dipesan()
+
+#Total pendapatan hotel
+
+def total_pendapatan():
+    total = sum(pemesanan['harga'] for pemesanan in pemesanan_kamar)
+    print(f"Total pendapatan hotel dari semua pemesanan: Rp{total}")
+
+total_pendapatan()
+
+#mmengubah satus ketersediaan kamar
+
+def ubah_status(nomor):
+    global pemesanan_kamar
+    pemesanan_kamar = [p for p in pemesanan_kamar if p['no_kamar'] != nomor]
+    print(f"reservasi kamar {nomor} telah dihapus.")
+    
+nomor = input("Masukkan nomor ruangan yang ingin anda ubah status ketersediannya (Jika tidak ada, ketik 'N') :")
+if nomor.upper() == "N":
+    sys.exit()
+else:
+    ubah_status()
+    
